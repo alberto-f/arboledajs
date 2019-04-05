@@ -188,29 +188,68 @@ describe('Arboleda', function () {
 
     describe('#addSibling()', function () {
       it('should throw Exception if passed node is null', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+
+        expect(childA.addSibling).withArgs(null).to.throwException()
       })
 
       it('should throw Exception if passed node is undefined', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+
+        expect(childA.addSibling).withArgs().to.throwException()
+      })
+
+      it('should throw Exception if call if done on node without parent', function () {
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+
+        expect(parentArbol.addSibling).withArgs(childA).to.throwException()
+      })
+
+      it('should throw Exception if call passing a non-arboleda instance', function () {
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+
+        expect(parentArbol.addSibling).withArgs(childA).to.throwException()
       })
 
       it('should add sibling when passed node is type of Arboleda', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+        const childB = new Arboleda({})
+
+        parentArbol.addChild(childA)
+        childA.addSibling(childB)
+
+        expect(childA.getParent()).to.be(childB.getParent())
+        expect(parentArbol.getChildren()).to.contain(childA)
+        expect(parentArbol.getChildren()).to.contain(childB)
       })
     })
 
     describe('#addChild()', function () {
       it('should throw Exception if passed node is null', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+
+        expect(parentArbol.addChild).withArgs(null).to.throwException()
       })
 
       it('should throw Exception if passed node is undefined', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+
+        expect(parentArbol.addChild).withArgs().to.throwException()
       })
 
       it('should add child when passed node is type of Arboleda', function () {
-        expect(false).to.be.ok()
+        const parentArbol = new Arboleda({})
+        const childA = new Arboleda({})
+
+        parentArbol.addChild(childA)
+
+        expect(childA.getParent()).to.be(parentArbol)
+        expect(parentArbol.getChildren()).to.contain(childA)
       })
     })
   })

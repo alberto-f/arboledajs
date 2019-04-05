@@ -47,6 +47,18 @@ module.exports = class Arboleda {
     throw new Error('#addChild parameter: Expect non-null arboledaInstance')
   }
 
+  addSibling(arboledaInstance) {
+    if(arboledaInstance instanceof Arboleda && !this.isRoot()) {
+      this.getParent().addChild(arboledaInstance);
+      
+      arboledaInstance.setParent(this.getParent())
+
+      return this
+    }
+
+    throw new Error('#addSibling: Unexpected value received')
+  }
+
   hasNextSibling(){
     if(!this.getParent()) {
       return false      
