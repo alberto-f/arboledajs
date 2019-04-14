@@ -106,4 +106,33 @@ module.exports = class Arboleda {
 
     this._parent = parentNode
   }
+
+  pathTo(arboledaInstance){
+    if(arboledaInstance instanceof Arboleda) {
+      return this._pathTo(arboledaInstance)
+    }
+
+    throw new Error('#pathTo: Unexpected value received')
+  }
+
+  _pathTo(arboledaInstance){
+    let pathTo = []
+    if(this === arboledaInstance) {
+      pathTo.push(this)
+
+    } else if(this.getChildren().length > 0){
+      const children = this.getChildren()
+      
+      for(let i = 0, j = children.length-1; i <= j; i++){
+        const child = children[i]
+        const path = child._pathTo(arboledaInstance)
+        if(path.length > 0){
+          pathTo = [this].concat(path)
+        }
+      }
+        
+    }
+
+    return pathTo;
+  }
 }

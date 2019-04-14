@@ -253,4 +253,66 @@ describe('Arboleda', function () {
       })
     })
   })
+
+  describe('#pathTo()', function () {
+      it('should return empty array [] if there is no path from node A to node B', function () {
+        const arbol = new Arboleda({})
+        const child = new Arboleda({})
+
+        const path = arbol.pathTo(child)
+
+        expect(path).to.be.empty()
+        expect(path.length).to.be(0)
+      })
+
+      it('should return an array [] with a node to iself', function () {
+        const arbol = new Arboleda({})
+        const child = new Arboleda({})
+        arbol.addChild(child)
+        
+        const pathToItself = arbol.pathTo(arbol)
+        expect(pathToItself.length).to.be(1)
+        expect(pathToItself).to.contain(arbol)
+      })
+
+      it('should return an array with nodes to traverse to get from NodeA to NodeB', function () {
+        const arbol = new Arboleda({})
+        const child_A = new Arboleda({})
+        const child_AA = new Arboleda({})
+        const child_AAA = new Arboleda({})
+        const child_B = new Arboleda({})
+
+        arbol.addChild(child_A)
+        arbol.addChild(child_B)
+
+        child_A.addChild(child_AA)
+        child_AA.addChild(child_AAA)
+        
+        
+        // Path to itself
+        const pathToItself = arbol.pathTo(arbol)
+        expect(pathToItself.length).to.be(1)
+        expect(pathToItself).to.contain(arbol)
+
+
+        // Path to direct child
+        const pathToDirectChild = arbol.pathTo(child_A)
+        expect(pathToDirectChild.length).to.be(2)
+
+        const expectedDirectPath = [arbol, child_A]
+        expectedDirectPath.forEach( nodeInPath =>
+          expect(pathToDirectChild).to.contain(nodeInPath)
+        )
+
+
+        // Path to deeper child
+        const pathToDeeperChild = arbol.pathTo(child_AAA)
+        expect(pathToDeeperChild.length).to.be(4)
+
+        const expectedDeeperPath = [arbol, child_A, child_AA, child_AAA]
+        expectedDeeperPath.forEach( nodeInPath =>
+          expect(pathToDeeperChild).to.contain(nodeInPath)
+        )
+      })
+  })
 })
