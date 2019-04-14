@@ -6,7 +6,8 @@
   "scripts": {
     "standard": "standard",
     "standard:fix": "standard --fix",
-    "test": "nyc mocha"
+    "test": "mocha",
+    "test:coverage": "nyc mocha"
   },
   "repository": {
     "type": "git",
