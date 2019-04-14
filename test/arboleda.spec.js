@@ -39,35 +39,35 @@ describe('Arboleda', function () {
       it('should return false if it has children', function () {
         const rootArbol = new Arboleda()
         rootArbol.setNode({})
-        
+
         const leafArbol = new Arboleda()
         leafArbol.setNode({})
 
         rootArbol.addChild(leafArbol)
-        
+
         expect(rootArbol.isLeave()).to.not.be.ok()
       })
 
       it('should return false if it has no node data', function () {
         const rootArbol = new Arboleda()
         rootArbol.setNode({})
-        
+
         const leafArbol = new Arboleda()
 
         rootArbol.addChild(leafArbol)
-        
+
         expect(rootArbol.isLeave()).to.not.be.ok()
       })
 
       it('should return true if it has no children', function () {
         const rootArbol = new Arboleda()
         rootArbol.setNode({})
-        
+
         const leafArbol = new Arboleda()
         leafArbol.setNode({})
 
         rootArbol.addChild(leafArbol)
-        
+
         expect(leafArbol.isLeave()).to.be.ok()
       })
     })
@@ -82,13 +82,11 @@ describe('Arboleda', function () {
       })
 
       it('should throw error if node is set to null', function () {
-        const content = {}
         const rootArbol = new Arboleda()
         expect(rootArbol.setNode).withArgs(null).to.throwException()
       })
 
       it('should throw error if node is set to undefined', function () {
-        const content = {}
         const rootArbol = new Arboleda()
         expect(rootArbol.setNode).withArgs(undefined).to.throwException()
       })
@@ -188,14 +186,12 @@ describe('Arboleda', function () {
 
     describe('#addSibling()', function () {
       it('should throw Exception if passed node is null', function () {
-        const parentArbol = new Arboleda({})
         const childA = new Arboleda({})
 
         expect(childA.addSibling).withArgs(null).to.throwException()
       })
 
       it('should throw Exception if passed node is undefined', function () {
-        const parentArbol = new Arboleda({})
         const childA = new Arboleda({})
 
         expect(childA.addSibling).withArgs().to.throwException()
@@ -251,6 +247,65 @@ describe('Arboleda', function () {
         expect(childA.getParent()).to.be(parentArbol)
         expect(parentArbol.getChildren()).to.contain(childA)
       })
+    })
+  })
+
+  describe('#pathTo()', function () {
+    it('should return empty array [] if there is no path from node A to node B', function () {
+      const arbol = new Arboleda({})
+      const child = new Arboleda({})
+
+      const path = arbol.pathTo(child)
+
+      expect(path).to.be.empty()
+      expect(path.length).to.be(0)
+    })
+
+    it('should return an array [] with a node to iself', function () {
+      const arbol = new Arboleda({})
+      const child = new Arboleda({})
+      arbol.addChild(child)
+
+      const pathToItself = arbol.pathTo(arbol)
+      expect(pathToItself.length).to.be(1)
+      expect(pathToItself).to.contain(arbol)
+    })
+
+    it('should return an array with nodes to traverse to get from NodeA to NodeB', function () {
+      const arbol = new Arboleda({})
+      const childA = new Arboleda({})
+      const childAA = new Arboleda({})
+      const childAAA = new Arboleda({})
+      const childB = new Arboleda({})
+
+      arbol.addChild(childA)
+      arbol.addChild(childB)
+
+      childA.addChild(childAA)
+      childAA.addChild(childAAA)
+
+      // Path to itself
+      const pathToItself = arbol.pathTo(arbol)
+      expect(pathToItself.length).to.be(1)
+      expect(pathToItself).to.contain(arbol)
+
+      // Path to direct child
+      const pathToDirectChild = arbol.pathTo(childA)
+      expect(pathToDirectChild.length).to.be(2)
+
+      const expectedDirectPath = [arbol, childA]
+      expectedDirectPath.forEach(nodeInPath =>
+        expect(pathToDirectChild).to.contain(nodeInPath)
+      )
+
+      // Path to deeper child
+      const pathToDeeperChild = arbol.pathTo(childAAA)
+      expect(pathToDeeperChild.length).to.be(4)
+
+      const expectedDeeperPath = [arbol, childA, childAA, childAAA]
+      expectedDeeperPath.forEach(nodeInPath =>
+        expect(pathToDeeperChild).to.contain(nodeInPath)
+      )
     })
   })
 })
