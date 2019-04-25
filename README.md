@@ -3,6 +3,4 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 [![codecov](https://codecov.io/gh/alberto-f/arboledajs/branch/master/graph/badge.svg?token=KeLug7MxBZ)](https://codecov.io/gh/alberto-f/arboledajs)
 
-Arboleda provide a robust Tree class.
-
-
+Arboleda is a micro-library to work with Tree-like data structures in Javascript.

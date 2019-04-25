@@ -1,8 +1,8 @@
 
 module.exports = class Arboleda {
-  constructor (content = null) {
-    this._parent = null
-    this._content = content
+  constructor (content) {
+    this._parent = undefined
+    this._content = (content !== null || content == null) ? content : undefined
     this._children = []
   }
 
@@ -15,20 +15,15 @@ module.exports = class Arboleda {
   }
 
   isRoot () {
-    return this.getNode() !== null && this.getParent() === null
+    return this.getParent() === undefined
   }
 
-  isLeave () {
-    return this.getNode() && this.getChildren().length === 0
+  isLeaf () {
+    return this.getChildren().length === 0
   }
 
   setNode (content) {
-    if (content === null || content === undefined) {
-      throw new Error('#setNode parameter: Expect non-null nor undefined parameter')
-    }
-
     this._content = content
-    return this
   }
 
   getNode () {
@@ -40,11 +35,9 @@ module.exports = class Arboleda {
       this._children.push(arboledaInstance)
 
       arboledaInstance.setParent(this)
-
-      return this
+    } else {
+      throw new Error('#addChild parameter: Expect non-null arboledaInstance')
     }
-
-    throw new Error('#addChild parameter: Expect non-null arboledaInstance')
   }
 
   addSibling (arboledaInstance) {
@@ -52,11 +45,9 @@ module.exports = class Arboleda {
       this.getParent().addChild(arboledaInstance)
 
       arboledaInstance.setParent(this.getParent())
-
-      return this
+    } else {
+      throw new Error('#addSibling: Unexpected value received')
     }
-
-    throw new Error('#addSibling: Unexpected value received')
   }
 
   hasNextSibling () {
@@ -107,6 +98,7 @@ module.exports = class Arboleda {
     this._parent = parentNode
   }
 
+  // TODO: It should be a query to check againts node's content
   pathTo (arboledaInstance) {
     if (arboledaInstance instanceof Arboleda) {
       return this._pathTo(arboledaInstance)
